@@ -1,5 +1,6 @@
-const express = require('express');
-const router = express.Router();
+import { Router, type Response, type Request } from 'express';
+
+const router = Router();
 
 /**
  * @swagger
@@ -24,8 +25,8 @@ const router = express.Router();
  *         description: Not found
  */
 
-router.get('/', function (_, res) {
-	res.json({ status: 'Server is running' });
+router.get('/', function (_req: Request, res: Response) {
+  res.json({ status: 'Server is running' });
 });
 
-module.exports = router;
+export default router;
