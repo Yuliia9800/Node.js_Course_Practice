@@ -11,6 +11,8 @@
   },
   "rules": {
     "@typescript-eslint/semi": "off",
-    "@typescript-eslint/comma-dangle": "off"
+    "@typescript-eslint/comma-dangle": "off",
+    "@typescript-eslint/no-misused-promises": "off",
+    "@typescript-eslint/strict-boolean-expressions": "off"
   }
 }
