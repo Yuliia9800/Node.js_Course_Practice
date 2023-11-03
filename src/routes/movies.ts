@@ -1,5 +1,7 @@
 import { Router, type Response, type Request } from 'express';
 import { Movie } from '../models/movie.model';
+import { moviesDataValidation } from '../validations/movies.validation';
+import { validationResult } from 'express-validator';
 
 const router = Router();
 
@@ -36,7 +38,7 @@ router.get('/', async (_req: Request, res: Response) => {
  * @swagger
  * /movies:
  *   post:
- *     summary: Create a new movie
+ *     summary: Create a new movie if it doesn't exist
  *     tags:
  *       - Movies
  *     requestBody:
@@ -46,19 +48,36 @@ router.get('/', async (_req: Request, res: Response) => {
  *           schema:
  *             $ref: '#/components/schemas/MovieInput'
  *     responses:
- *       201:
+ *       200:
  *         description: Movie created successfully
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Movie'
+ *       404:
+ *         description: Movie already exists
  *       500:
  *         description: Internal server error
  */
 
-router.post('/', async (req: Request, res: Response) => {
+router.post('/', moviesDataValidation, async (req: Request, res: Response) => {
   try {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        success: false,
+        errors: errors.array(),
+      });
+    }
+    const exist = await Movie.findOne(req.body);
+
+    if (exist) {
+      return res.status(404).json({ message: 'That movie already exist' });
+    }
+
     const movie = await Movie.create(req.body);
+
     res.status(200).json(movie);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
@@ -170,7 +189,7 @@ router.delete('/:id', async (req: Request, res: Response) => {
  *         content:
  *           application/json:
  *             schema:
- *               type: array
+ *               type: string
  *               items:
  *                 $ref: '#/components/schemas/Movie'
  *       500:

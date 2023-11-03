@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJSDoc from 'swagger-jsdoc';
 import bodyParser from 'body-parser';
+import 'dotenv/config';
 
 import healthCheckRouter from './routes/health-check';
 import moviesRouter from './routes/movies';
@@ -48,7 +49,7 @@ app.use((_err: Error, _req: Request, res: Response, _next: NextFunction) => {
 });
 
 mongoose
-  .connect('mongodb+srv://uliasumik:3GyGBvHtpl4AyYjR@yuliia.pniib08.mongodb.net/?retryWrites=true&w=majority')
+  .connect(`${process.env.MONGO_DB}`)
   .then(() => {
     console.log('Mongoose connected!');
     app.listen(PORT, () => {

@@ -1,5 +1,7 @@
 import { Router, type Response, type Request } from 'express';
 import { Genre } from '../models/genre.model';
+import { genreDataValidation } from '../validations/genre.validation';
+import { validationResult } from 'express-validator';
 
 const router = Router();
 
@@ -66,9 +68,9 @@ router.delete('/:id', async (req: Request, res: Response) => {
 
 /**
  * @swagger
- * /genre:
+ * /genres:
  *   post:
- *     summary: Create a new genre
+ *     summary: Create a new genre if it doesn't already exist
  *     tags:
  *       - Genres
  *     requestBody:
@@ -76,19 +78,35 @@ router.delete('/:id', async (req: Request, res: Response) => {
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               genreName:
- *                 type: string
- *                 description: The name of the genre.
+ *             $ref: '#/components/schemas/GenreInput'
  *     responses:
  *       200:
  *         description: Genre created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Genre'
+ *       404:
+ *         description: Genre already exists
  *       500:
  *         description: Internal server error
  */
-router.post('/', async (req: Request, res: Response) => {
+router.post('/', genreDataValidation, async (req: Request, res: Response) => {
   try {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        success: false,
+        errors: errors.array(),
+      });
+    }
+    const exist = await Genre.findOne(req.body);
+
+    if (exist) {
+      return res.status(404).json({ message: 'That genre already exist' });
+    }
+
     const genre = await Genre.create(req.body);
     res.status(200).json(genre);
   } catch (error: any) {
