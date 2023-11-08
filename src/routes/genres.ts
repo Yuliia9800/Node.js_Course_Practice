@@ -4,7 +4,6 @@ import { genreDataValidation } from '../validations/genre.validation';
 import { validationResult } from 'express-validator';
 
 const router = Router();
-
 /**
  * @swagger
  * /genre:
@@ -17,10 +16,14 @@ const router = Router();
  *         description: Successful response
  *         content:
  *           application/json:
- *             example:
- *               - genreName: Action
- *               - genreName: Drama
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Genre'
+ *       500:
+ *         description: Internal server error
  */
+
 router.get('/', async (req: Request, res: Response) => {
   try {
     const genres = await Genre.find({});
@@ -78,7 +81,7 @@ router.delete('/:id', async (req: Request, res: Response) => {
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/GenreInput'
+ *             $ref: '#/components/schemas/Genre'
  *     responses:
  *       200:
  *         description: Genre created successfully
@@ -133,11 +136,7 @@ router.post('/', genreDataValidation, async (req: Request, res: Response) => {
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               genreName:
- *                 type: string
- *                 description: The updated name of the genre.
+ *             $ref: '#/components/schemas/Genre'
  *     responses:
  *       200:
  *         description: Genre updated successfully

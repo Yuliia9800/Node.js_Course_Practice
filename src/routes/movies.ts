@@ -46,7 +46,7 @@ router.get('/', async (_req: Request, res: Response) => {
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/MovieInput'
+ *             $ref: '#/components/schemas/Movie'
  *     responses:
  *       200:
  *         description: Movie created successfully
@@ -103,7 +103,7 @@ router.post('/', moviesDataValidation, async (req: Request, res: Response) => {
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/MovieInput'
+ *             $ref: '#/components/schemas/Movie'
  *     responses:
  *       200:
  *         description: Movie updated successfully
@@ -189,7 +189,7 @@ router.delete('/:id', async (req: Request, res: Response) => {
  *         content:
  *           application/json:
  *             schema:
- *               type: string
+ *               type: array
  *               items:
  *                 $ref: '#/components/schemas/Movie'
  *       500:
