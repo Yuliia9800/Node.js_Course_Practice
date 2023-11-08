@@ -1,0 +1,22 @@
+components:
+  schemas:
+    Movie:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        releaseDate:
+          type: string
+          format: date
+        genre:
+          type: array
+          items:
+            type: string
+    Genre:
+      type: object
+      properties:
+        genreName:
+          type: string
+          description: The name of the genre.

@@ -25,7 +25,7 @@ const router = Router();
  *         description: Not found
  */
 
-router.get('/', function (_req: Request, res: Response) {
+router.get('/', (_req: Request, res: Response) => {
   res.json({ status: 'Server is running' });
 });
 
