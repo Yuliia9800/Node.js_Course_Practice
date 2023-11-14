@@ -6,7 +6,7 @@ import { validationResult } from 'express-validator';
 const router = Router();
 /**
  * @swagger
- * /genre:
+ * /genres:
  *   get:
  *     summary: Get a list of genres
  *     tags:
@@ -35,7 +35,7 @@ router.get('/', async (req: Request, res: Response) => {
 
 /**
  * @swagger
- * /genre/{id}:
+ * /genres/{id}:
  *   delete:
  *     summary: Delete a genre by ID
  *     tags:
@@ -119,7 +119,7 @@ router.post('/', genreDataValidation, async (req: Request, res: Response) => {
 
 /**
  * @swagger
- * /genre/{id}:
+ * /genres/{id}:
  *   put:
  *     summary: Update a genre by ID
  *     tags:
